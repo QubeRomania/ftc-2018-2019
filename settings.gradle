@@ -1,0 +1,10 @@
+// Trick to get submodules working taken from here:
+// https://medium.com/@alteromusica/git-submodule-gradle-shared-library-d40383403b59
+include ':FtcRobotController'
+
+rootProject.children.each { project ->
+    String relativeProjectPath = project.projectDir.path.replace(settingsDir.path, "")
+    project.projectDir = new File("deps/ftc_app/$relativeProjectPath")
+}
+
+include ':app'
