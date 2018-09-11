@@ -8,6 +8,7 @@ apply from: '../deps/ftc_app/build.common.gradle'
 android {
     defaultConfig {
         applicationId "ro.cnmv.qube.ftc"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -20,8 +21,20 @@ android {
             storeFile rootProject.file('deps/ftc_app/libs/ftc.debug.keystore')
         }
     }
+    packagingOptions {
+        // Exclude all non-Android platforms
+        exclude 'org/bytedeco/javacpp/windows-x86/**'
+        exclude 'org/bytedeco/javacpp/windows-x86_64/**'
+        exclude 'org/bytedeco/javacpp/macosx-x86/**'
+        exclude 'org/bytedeco/javacpp/macosx-x86_64/**'
+        exclude 'org/bytedeco/javacpp/linux-x86/**'
+        exclude 'org/bytedeco/javacpp/linux-x86_64/**'
+    }
 }
 
 dependencies {
+    implementation 'com.android.support:multidex:1.0.3'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.bytedeco:javacv-platform:1.4.2"
+    implementation "org.bytedeco.javacpp-presets:opencv:3.4.2-1.4.2:android-arm"
 }
