@@ -31,6 +31,12 @@ class OpenCVTest: LinearOpMode() {
         val cameraMonitorViewId = ctx.resources.getIdentifier("cameraMonitorViewId", "id", ctx.packageName)
         val cameraMonitorView = activity.findViewById(cameraMonitorViewId) as LinearLayout
 
+        // Use the camera device indicated by this ID
+        val cameraId = 0
+
+        val camera = Camera.open(cameraId)
+        camera.setDisplayOrientation(90)
+
         /*
         activity.requestPermissions(arrayOf(Manifest.permission.CAMERA), 0)
 
@@ -54,19 +60,13 @@ class OpenCVTest: LinearOpMode() {
 
             log.add("Setting up camera")
 
-            // Use the camera device indicated by this ID
-            val cameraId = 0
-
-            val camera = Camera.open(cameraId)
-            camera.setDisplayOrientation(0)
-
             val params = camera.parameters
 
             val picSizes = params.supportedPreviewSizes
             picSizes.forEach { Log.e("PicSize", "${it.width}x${it.height}") }
 
             val width = 640
-            val height = 640
+            val height = 480
 
             with(params) {
                 setPreviewSize(width, height)
@@ -97,23 +97,27 @@ class OpenCVTest: LinearOpMode() {
                     val frameConverter = AndroidFrameConverter()
                     val converter = OpenCVFrameConverter.ToMat()
 
+                    val rotated = Mat()
+                    val gray = Mat()
+                    val thresh = Mat()
+                    val contours = MatVector()
+
                     camera.setPreviewCallback { buffer, _ ->
                         val frame = frameConverter.convert(buffer, width, height)
-
                         val image = converter.convertToMat(frame)
 
-                        val gray = Mat()
-                        cvtColor(image, gray, COLOR_BGR2GRAY)
+                        rotate(image, rotated, ROTATE_90_CLOCKWISE)
 
-                        val thresh = Mat()
+                        cvtColor(rotated, gray, COLOR_BGR2GRAY)
+
                         threshold(gray, thresh, 127.0, 255.0, THRESH_BINARY)
 
-                        val contours = MatVector()
                         findContours(thresh, contours, RETR_EXTERNAL, CHAIN_APPROX_SIMPLE)
 
-                        drawContours(image, contours, -1, Scalar(0.0, 255.0, 255.0, 255.0))
+                        drawContours(rotated, contours, -1, Scalar(0.0, 255.0, 255.0, 255.0))
 
-                        val bitmap = frameConverter.convert(frame)
+                        val newFrame = converter.convert(rotated)
+                        val bitmap = frameConverter.convert(newFrame)
                         imageView.setImageBitmap(bitmap)
                     }
                 }
@@ -131,5 +135,8 @@ class OpenCVTest: LinearOpMode() {
         while (opModeIsActive() && elapsed.seconds() < seconds) {
             sleep(25)
         }
+
+        camera.stopPreview()
+        camera.release()
     }
 }
