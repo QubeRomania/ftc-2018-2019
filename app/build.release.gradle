@@ -11,4 +11,5 @@ dependencies {
     api (name: 'FtcCommon-release', ext: 'aar')
     api (name: 'Analytics-release', ext:'aar')
     api (name: 'WirelessP2p-release', ext:'aar')
+    implementation 'com.acmerobotics.roadrunner:core:0.2.4'
 }
