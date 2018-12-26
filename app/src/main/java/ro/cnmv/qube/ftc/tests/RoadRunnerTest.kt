@@ -10,6 +10,10 @@ import ro.cnmv.qube.ftc.hardware.Hardware
  */
 @Autonomous(name = "RoadRunner Test", group = "Tests")
 class RoadRunnerTest: OpMode() {
+    override fun preInit() {
+
+    }
+
     override fun Hardware.run() {
 
         var test : TrajectoryBuilder
