@@ -17,7 +17,7 @@ class Intake (hwMap: HardwareMap) {
     init {
         setSlideDirection(DcMotorSimple.Direction.FORWARD)
         stopSlide()
-        resetSlideEcndoer()
+        resetSlideEncoder()
 
         setCrServoDirection(maturicaServo1, DcMotorSimple.Direction.FORWARD)
         setCrServoDirection(maturicaServo2, DcMotorSimple.Direction.REVERSE)
@@ -34,8 +34,13 @@ class Intake (hwMap: HardwareMap) {
         slideMotor.direction = direction
     }
 
+    //Set Mode
+    fun setSlideMode(mode: DcMotor.RunMode) {
+        slideMotor.mode = mode
+    }
+
     //Reset Encoder
-    fun resetSlideEcndoer() {
+    fun resetSlideEncoder() {
         slideMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         slideMotor.mode = DcMotor.RunMode.RUN_USING_ENCODER
     }
