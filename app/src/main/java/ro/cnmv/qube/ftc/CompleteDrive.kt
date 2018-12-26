@@ -30,7 +30,7 @@ class CompleteDrive: OpMode() {
 
 
             // Latching
-            if(endGame && outTake.outTakeSlider.currentPosition < 10) { // Make sure the outTake slider is closed before bringing the latcher down
+            if(endGame && outTake.isClosed()) { // Make sure the outTake slider is closed before bringing the latcher down
                 latcher.latch(when(gp1.checkToggle(Gamepad.Button.A)) {
                     true -> Latcher.LatchPosition.INTERMEDIATE
                     false -> Latcher.LatchPosition.CLOSED
@@ -38,6 +38,7 @@ class CompleteDrive: OpMode() {
             } else {
                 latcher.latch(Latcher.LatchPosition.EXTENDED)
             }
+
 
         }
     }

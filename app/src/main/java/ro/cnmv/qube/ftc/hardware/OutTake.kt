@@ -21,6 +21,8 @@ class OutTake(hwMap: HardwareMap) {
     val SERVODROP: Double = TODO()
     val SERVOCLOSE: Double = TODO()
 
+    val THRESHOLD: Int = 10 /// TODO: To be tested
+
     init {
         outTakeSlider.direction = DcMotorSimple.Direction.FORWARD
         outTakeSlider.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
@@ -51,5 +53,9 @@ class OutTake(hwMap: HardwareMap) {
         outTakeSlider.targetPosition = SLIDERCLOSE
         outTakeSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
         outTakeSlider.power = 0.8
+    }
+
+    fun isClosed(): Boolean {
+        return outTakeSlider.currentPosition < THRESHOLD
     }
 }
