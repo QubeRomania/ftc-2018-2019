@@ -45,4 +45,11 @@ class OutTake(hwMap: HardwareMap) {
             false -> SERVOCLOSE
         }
     }
+
+    fun stop() {
+        dropServo.position = SERVOCLOSE
+        outTakeSlider.targetPosition = SLIDERCLOSE
+        outTakeSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
+        outTakeSlider.power = 0.8
+    }
 }
