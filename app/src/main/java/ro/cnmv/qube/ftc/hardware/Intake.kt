@@ -10,8 +10,8 @@ import org.bytedeco.javacpp.avformat
  */
 
 class Intake (hwMap: HardwareMap) {
-    val slideMotor = hwMap.dcMotor.get("slideMotor") ?: throw Exception("Failed to find motor slideMotor")
-    val rotateMotor = hwMap.dcMotor.get("rotateMotor") ?: throw Exception("Failed to find motor rotateMotor")
+    val slideMotor = hwMap.dcMotor.get("intakeSlideMotor") ?: throw Exception("Failed to find motor intakeSlideMotor")
+    val rotateMotor = hwMap.dcMotor.get("intakeRotateMotor") ?: throw Exception("Failed to find motor intakeRotateMotor")
     val maturicaServo1 = hwMap.crservo.get("intakeServo1") ?: throw Exception("Failed to find crservo intakeServo1")
     val maturicaServo2 = hwMap.crservo.get("intakeServo2") ?: throw Exception("Failed to find crservo intakeServo2")
 
@@ -37,10 +37,24 @@ class Intake (hwMap: HardwareMap) {
 
     /// Slide Motor functions
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    var pos = 0
+    val MULTIPLIER: Int = TODO()
+    val SLIDER_CLOSE: Int = TODO()
+    val SLIDER_OPEN: Int = TODO()
+
 
     fun runSlideToPosition(position: Int, power: Double) {
         slideMotor.targetPosition = position
+        slideMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         slideMotor.power = power
+    }
+
+    fun moveSlider(power: Double) {
+        pos += (power*MULTIPLIER).toInt()
+        pos = Math.min(pos, SLIDER_OPEN)
+        pos = Math.max(pos, SLIDER_CLOSE)
+
+        runSlideToPosition(pos, 0.8)
     }
 
     fun stopSlide() {
@@ -55,6 +69,7 @@ class Intake (hwMap: HardwareMap) {
 
     fun runRotateToPosition(position: Int, power: Double) {
         rotateMotor.targetPosition = position
+        rotateMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
         rotateMotor.power = power
     }
 
@@ -73,7 +88,6 @@ class Intake (hwMap: HardwareMap) {
     val TRANSFER_POSITION: Int = TODO()
     val MODE_POWER: Double = TODO()
 
-    //Set Mode
     fun setMode(mode: Mode) {
         val pos = when(mode) {
             Mode.OPEN -> OPEN_POSITION
