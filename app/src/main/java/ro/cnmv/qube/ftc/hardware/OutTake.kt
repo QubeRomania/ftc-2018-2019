@@ -12,8 +12,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap
 class OutTake(hwMap: HardwareMap) {
     val outTakeSlider = hwMap.dcMotor["outTakeSlider"] ?: throw Exception("Failed to find motor outTakeSlider")
 
+    var outTakePosition: Int = 0
     val SLIDEROPEN: Int = TODO()
     val SLIDERCLOSE: Int = TODO()
+    val MULTIPLIER: Int = TODO()
 
     val dropServo =  hwMap.servo["outTakeDrop"] ?: throw Exception("Failed to find servo outTakeDrop")
     val SERVODROP: Double = TODO()
@@ -23,14 +25,16 @@ class OutTake(hwMap: HardwareMap) {
         outTakeSlider.direction = DcMotorSimple.Direction.FORWARD
         outTakeSlider.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         outTakeSlider.mode = DcMotor.RunMode.RUN_USING_ENCODER
+
+        outTakePosition = 0
     }
 
-    fun moveSlider(open : Boolean) {
-        outTakeSlider.targetPosition = when(open) {
-            true -> SLIDEROPEN
-            false -> SLIDERCLOSE
-        }
+    fun moveSlider(power: Double) {
+        outTakePosition += (power*MULTIPLIER).toInt()
+        outTakePosition = Math.min(outTakePosition, SLIDEROPEN)
+        outTakePosition = Math.max(outTakePosition, SLIDERCLOSE)
 
+        outTakeSlider.targetPosition = outTakePosition
         outTakeSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
         outTakeSlider.power = 0.8
     }
