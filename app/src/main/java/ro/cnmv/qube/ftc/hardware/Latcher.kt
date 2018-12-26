@@ -13,9 +13,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap
 class Latcher (hwMap : HardwareMap) {
     val latchMotor = hwMap.dcMotor["latchMotor"] ?: throw Error("Failed to find motor latchMotor")
 
-    val closedPosition: Int = TODO()
-    val intermediatePosition: Int = TODO()
-    val extendedPosition: Int = TODO()
+    val CLOSED: Int = TODO()
+    val INTERMEDIATE: Int = TODO()
+    val EXTENDED: Int = TODO()
 
     enum class LatchPosition {
         CLOSED, INTERMEDIATE, EXTENDED
@@ -29,9 +29,9 @@ class Latcher (hwMap : HardwareMap) {
 
     fun latch(position: LatchPosition) {
         latchMotor.targetPosition = when(position) {
-            LatchPosition.CLOSED -> closedPosition
-            LatchPosition.EXTENDED -> extendedPosition
-            LatchPosition.INTERMEDIATE -> intermediatePosition
+            LatchPosition.CLOSED -> CLOSED
+            LatchPosition.INTERMEDIATE -> INTERMEDIATE
+            LatchPosition.EXTENDED -> EXTENDED
         }
 
         latchMotor.mode = DcMotor.RunMode.RUN_TO_POSITION

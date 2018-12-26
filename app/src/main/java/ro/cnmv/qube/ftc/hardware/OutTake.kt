@@ -12,12 +12,12 @@ import com.qualcomm.robotcore.hardware.HardwareMap
 class OutTake(hwMap: HardwareMap) {
     val outTakeSlider = hwMap.dcMotor["outTakeSlider"] ?: throw Exception("Failed to find motor outTakeSlider")
 
-    val sliderOpen: Int = TODO()
-    val sliderClose: Int = TODO()
+    val SLIDEROPEN: Int = TODO()
+    val SLIDERCLOSE: Int = TODO()
 
     val dropServo =  hwMap.servo["outTakeDrop"] ?: throw Exception("Failed to find servo outTakeDrop")
-    val servoDrop: Double = TODO()
-    val servoClose: Double = TODO()
+    val SERVODROP: Double = TODO()
+    val SERVOCLOSE: Double = TODO()
 
     init {
         outTakeSlider.direction = DcMotorSimple.Direction.FORWARD
@@ -27,8 +27,8 @@ class OutTake(hwMap: HardwareMap) {
 
     fun moveSlider(open : Boolean) {
         outTakeSlider.targetPosition = when(open) {
-            true -> sliderOpen
-            false -> sliderClose
+            true -> SLIDEROPEN
+            false -> SLIDERCLOSE
         }
 
         outTakeSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
@@ -37,8 +37,8 @@ class OutTake(hwMap: HardwareMap) {
 
     fun dropMinerals(drop: Boolean) {
         dropServo.position = when(drop) {
-            true -> servoDrop
-            false -> servoClose
+            true -> SERVODROP
+            false -> SERVOCLOSE
         }
     }
 }
