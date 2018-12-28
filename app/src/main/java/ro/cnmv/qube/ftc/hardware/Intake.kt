@@ -77,7 +77,7 @@ class Intake (hwMap: HardwareMap) {
         rotateMotor.power = 0.0
     }
 
-    enum class Mode{
+    enum class ModeRotate{
         OPEN,
         CLOSE,
         TRANSFER
@@ -88,11 +88,11 @@ class Intake (hwMap: HardwareMap) {
     val TRANSFER_POSITION: Int = TODO()
     val MODE_POWER: Double = TODO()
 
-    fun setMode(mode: Mode) {
+    fun rotate(mode: ModeRotate) {
         val pos = when(mode) {
-            Mode.OPEN -> OPEN_POSITION
-            Mode.CLOSE -> CLOSE_POSITION
-            Mode.TRANSFER -> TRANSFER_POSITION
+            ModeRotate.OPEN -> OPEN_POSITION
+            ModeRotate.CLOSE -> CLOSE_POSITION
+            ModeRotate.TRANSFER -> TRANSFER_POSITION
         }
         runRotateToPosition(pos, MODE_POWER)
     }
@@ -113,11 +113,26 @@ class Intake (hwMap: HardwareMap) {
         maturicaServo2.power = 0.0
     }
 
+    enum class ModeMaturica {
+        IN,
+        OUT,
+        STOP
+    }
     val POWER = 1.0
-    fun maturica(af: Boolean) {
-        if (af) setMaturicaPower(POWER)
-        else setMaturicaPower(0.0)
+    fun maturica(mode: ModeMaturica) {
+        val power = when(mode) {
+            ModeMaturica.IN -> POWER
+            ModeMaturica.OUT -> -POWER
+            ModeMaturica.STOP -> 0.0
+        }
+        setMaturicaPower(power)
     }
 
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    fun stop() {
+        stopSlide()
+        stopRotate()
+        stopMaturica()
+    }
 }

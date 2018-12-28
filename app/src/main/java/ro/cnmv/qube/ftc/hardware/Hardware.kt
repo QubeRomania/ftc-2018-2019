@@ -10,6 +10,9 @@ class Hardware(hwMap: HardwareMap, opMode: LinearOpMode) {
     val latcher = Latcher(hwMap)
 
     fun stop() {
-        //motors.stop()
+        motors.stop()
+        intake.stop()
+        outTake.stop()
+        latcher.stop()
     }
 }

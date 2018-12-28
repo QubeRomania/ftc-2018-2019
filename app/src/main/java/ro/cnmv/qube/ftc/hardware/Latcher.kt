@@ -38,5 +38,9 @@ class Latcher (hwMap : HardwareMap) {
         latchMotor.power = 0.8
     }
 
+    fun stop() {
+        latchMotor.power = 0.0
+    }
+
 }
 
