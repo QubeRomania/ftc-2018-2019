@@ -16,7 +16,7 @@ class Intake (hwMap: HardwareMap) {
     val maturicaServo2 = hwMap.crservo.get("intakeServo2") ?: throw Exception("Failed to find crservo intakeServo2")
 
     init {
-        slideMotor.direction = DcMotorSimple.Direction.FORWARD
+        slideMotor.direction = DcMotorSimple.Direction.REVERSE
         slideMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
         stopSlide()
         slideMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
@@ -39,8 +39,8 @@ class Intake (hwMap: HardwareMap) {
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     var pos = 0
     val MULTIPLIER: Int = TODO()
-    val SLIDER_CLOSE: Int = TODO()
-    val SLIDER_OPEN: Int = TODO()
+    val SLIDER_CLOSE: Int = 0
+    val SLIDER_OPEN: Int = 4800
 
 
     fun runSlideToPosition(position: Int, power: Double) {
@@ -83,9 +83,9 @@ class Intake (hwMap: HardwareMap) {
         TRANSFER
     }
 
-    val OPEN_POSITION: Int = TODO()
-    val CLOSE_POSITION: Int =  TODO()
-    val TRANSFER_POSITION: Int = TODO()
+    val OPEN_POSITION: Int = 0
+    val CLOSE_POSITION: Int =  177
+    val TRANSFER_POSITION: Int = 768
     val MODE_POWER: Double = TODO()
 
     fun rotate(mode: ModeRotate) {
