@@ -3,22 +3,23 @@ package ro.cnmv.qube.ftc
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import ro.cnmv.qube.ftc.hardware.Hardware
 import ro.cnmv.qube.ftc.hardware.Latcher
+import java.lang.Math.atan2
 
 @TeleOp(name = "CompleteDrive", group = "Main")
 
 class CompleteDrive: OpMode() {
 
-    val gp1 = Gamepad(gamepad1)
-    val gp2 = Gamepad(gamepad2)
-    val endGame: Boolean
-        get() = gp1.checkToggle(Gamepad.Button.START)
 
     override fun Hardware.run() {
 
+        val gp1 = Gamepad(gamepad1)
+        val gp2 = Gamepad(gamepad2)
 
         waitForStart()
 
         while(opModeIsActive()) {
+
+            val endGame = gp1.checkToggle(Gamepad.Button.START)
             // OutTake
             if(endGame) {
                 outTake.close()
@@ -39,8 +40,31 @@ class CompleteDrive: OpMode() {
                 latcher.latch(Latcher.LatchPosition.EXTENDED)
             }
 
-
+            //Drive
+            hw.motors.move(direction, speed, rotation)
         }
     }
+
+    /// The direction in which the robot is translating.
+    val direction: Double
+        get() {
+            val x = gamepad1.left_stick_x.toDouble()
+            val y = -gamepad1.left_stick_y.toDouble()
+
+            return atan2(y, x) / Math.PI * 180.0 - 90.0
+        }
+
+    /// Rotation around the robot's Z axis.
+    val rotation: Double
+        get() = -gamepad1.right_stick_x.toDouble()
+
+    /// Translation speed.
+    val speed: Double
+        get() {
+            val x = gamepad1.left_stick_x.toDouble()
+            val y = gamepad1.left_stick_y.toDouble()
+
+            return Math.sqrt((x * x) + (y * y))
+        }
 
 }
