@@ -10,10 +10,11 @@ class ShowPositions:OpMode() {
     override fun Hardware.run() {
         waitForStart()
         while (opModeIsActive()) {
-            telemetry.addData("Intake Position: ", intake.getIntakePosiiton())
-            telemetry.addData("Outake Position: ", outTake.outTakePosition)
+            telemetry.addData("Intake Position", intake.getIntakePosiiton())
+            telemetry.addData("Outake Position", outTake.outTakeSlider.currentPosition)
+            telemetry.addData("Latcher Position", latcher.latchMotor.currentPosition)
             motors.printPosition(telemetry)
-            telemetry.update()git
+            telemetry.update()
         }
     }
 }

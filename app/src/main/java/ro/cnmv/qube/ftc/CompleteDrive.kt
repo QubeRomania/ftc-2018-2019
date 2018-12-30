@@ -21,7 +21,7 @@ class CompleteDrive: OpMode() {
         while(opModeIsActive()) {
             // OutTake
             if(endGame) {
-                outTake.stop()
+                outTake.close()
             } else {
                 outTake.moveSlider((gamepad2.right_trigger - gamepad2.left_trigger).toDouble())
                 outTake.dropMinerals(gp2.checkToggle(Gamepad.Button.A))
