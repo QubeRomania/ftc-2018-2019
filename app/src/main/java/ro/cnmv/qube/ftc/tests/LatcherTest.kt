@@ -7,9 +7,8 @@ import ro.cnmv.qube.ftc.hardware.Latcher
 
 class LatcherTest: OpMode() {
 
-    val gp1 = Gamepad(gamepad1)
-
     override fun Hardware.run() {
+        val gp1 = Gamepad(gamepad1)
 
         waitForStart()
 

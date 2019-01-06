@@ -10,9 +10,8 @@ import ro.cnmv.qube.ftc.hardware.Intake
 
 class IntakeTest: OpMode() {
 
-    val gp1 = Gamepad(gamepad1)
-
     override fun Hardware.run() {
+        val gp1 = Gamepad(gamepad1)
 
         waitForStart()
 
@@ -26,6 +25,9 @@ class IntakeTest: OpMode() {
             if (gp1.left_stick_y > 0.5) intake.maturica(Intake.ModeMaturica.IN)
             else if (gp1.left_stick_y <= 0.5 && gp1.left_stick_y >= -0.5) intake.maturica(Intake.ModeMaturica.STOP)
             else if (gp1.left_stick_y < -0.5) intake.maturica(Intake.ModeMaturica.OUT)
+
+            telemetry.addData("Slider position", intake.slideMotor.currentPosition)
+            telemetry.update()
         }
 
 

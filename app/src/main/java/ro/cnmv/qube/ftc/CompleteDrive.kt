@@ -2,6 +2,7 @@ package ro.cnmv.qube.ftc
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import ro.cnmv.qube.ftc.hardware.Hardware
+import ro.cnmv.qube.ftc.hardware.Intake
 import ro.cnmv.qube.ftc.hardware.Latcher
 import java.lang.Math.atan2
 
@@ -27,8 +28,15 @@ class CompleteDrive: OpMode() {
                 outTake.moveSlider((gamepad2.right_trigger - gamepad2.left_trigger).toDouble())
                 outTake.dropMinerals(gp2.checkToggle(Gamepad.Button.A))
             }
-            ///TODO: Intake
+            ///Intake
+            intake.moveSlider((gp1.right_trigger - gp1.left_trigger).toDouble())
 
+            if (gp1.checkToggle(Gamepad.Button.A)) intake.rotate(Intake.ModeRotate.TRANSFER)
+            else intake.rotate(Intake.ModeRotate.OPEN)
+
+            if (gp2.left_stick_y > 0.5) intake.maturica(Intake.ModeMaturica.IN)
+            else if (gp2.left_stick_y <= 0.5 && gp2.left_stick_y >= -0.5) intake.maturica(Intake.ModeMaturica.STOP)
+            else if (gp2.left_stick_y < -0.5) intake.maturica(Intake.ModeMaturica.OUT)
 
             // Latching
             if(endGame && outTake.isClosed()) { // Make sure the outTake slider is closed before bringing the latcher down
