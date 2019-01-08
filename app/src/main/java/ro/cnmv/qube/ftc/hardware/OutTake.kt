@@ -18,7 +18,7 @@ class OutTake(hwMap: HardwareMap) {
     val MULTIPLIER: Int = 10
 
     val dropServo =  hwMap.servo["outTakeDrop"] ?: throw Exception("Failed to find servo outTakeDrop")
-    val SERVODROP: Double = 0.0
+    val SERVODROP: Double = 0.5
     val SERVOCLOSE: Double = 0.0
 
     val THRESHOLD: Int = 10 /// TODO: To be tested

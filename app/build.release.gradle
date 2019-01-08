@@ -12,4 +12,6 @@ dependencies {
     api (name: 'Analytics-release', ext:'aar')
     api (name: 'WirelessP2p-release', ext:'aar')
     implementation 'com.acmerobotics.roadrunner:core:0.2.4'
+    implementation (name: 'tfod-release', ext:'aar')
+    implementation (name: 'tensorflow-lite-0.0.0-nightly', ext:'aar')
 }

@@ -12,6 +12,8 @@ class ShowPositions:OpMode() {
         while (opModeIsActive()) {
             telemetry.addData("Intake Position", intake.getIntakePosiiton())
             telemetry.addData("Outake Position", outTake.outTakeSlider.currentPosition)
+            telemetry.addData("Outake Drop", outTake.dropServo.position)
+            telemetry.addData("Intake rotate", intake.rotateMotor.currentPosition)
             telemetry.addData("Latcher Position", latcher.latchMotor.currentPosition)
             motors.printPosition(telemetry)
             telemetry.update()

@@ -87,9 +87,9 @@ class Intake (hwMap: HardwareMap) {
         TRANSFER
     }
 
-    val OPEN_POSITION: Int = 0
-    val CLOSE_POSITION: Int =  177
-    val TRANSFER_POSITION: Int = 768
+    val OPEN_POSITION: Int = 890
+    val CLOSE_POSITION: Int =  0
+    val TRANSFER_POSITION: Int = 230
     val MODE_POWER: Double = 0.8
 
     fun rotate(mode: ModeRotate) {

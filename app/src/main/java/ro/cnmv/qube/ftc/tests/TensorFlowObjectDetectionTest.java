@@ -51,8 +51,8 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@TeleOp(name = "Concept: TensorFlow Object Detection", group = "Concept")
-@Disabled
+@TeleOp(name = "TensorFlow Object Detection Test", group = "Tests")
+//@Disabled
 public class TensorFlowObjectDetectionTest extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
@@ -91,7 +91,13 @@ public class TensorFlowObjectDetectionTest extends LinearOpMode {
         initVuforia();
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
+            telemetry.addData ("mata", 0);
+            telemetry.update();
+
             initTfod();
+            telemetry.addData ("mata", 1);
+            telemetry.update();
+
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
@@ -155,6 +161,7 @@ public class TensorFlowObjectDetectionTest extends LinearOpMode {
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
          */
+
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
@@ -169,11 +176,28 @@ public class TensorFlowObjectDetectionTest extends LinearOpMode {
     /**
      * Initialize the Tensor Flow Object Detection engine.
      */
-    private void initTfod() {
+    private void initTfod() {telemetry.addData ("mata", 2);
+
+        telemetry.addData ("mata", 0);
+        telemetry.update();
+
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
             "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        telemetry.addData ("mata", 1);
+        telemetry.update();
+
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
+        telemetry.addData ("mata", 2);
+        telemetry.update();
+
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
+        telemetry.addData ("mata", 3);
+        telemetry.update();
+
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
+
+        telemetry.addData ("mata", 4);
+        telemetry.update();
+
     }
 }
