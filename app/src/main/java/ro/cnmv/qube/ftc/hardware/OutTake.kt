@@ -17,9 +17,12 @@ class OutTake(hwMap: HardwareMap) {
     val SLIDERCLOSE: Int = 0
     val MULTIPLIER: Int = 10
 
-    val dropServo =  hwMap.servo["outTakeDrop"] ?: throw Exception("Failed to find servo outTakeDrop")
-    val SERVODROP: Double = 0.5
-    val SERVOCLOSE: Double = 0.0
+    val dropServo1 =  hwMap.servo["outTakeDrop1"] ?: throw Exception("Failed to find servo outTakeDrop1")
+    val dropServo2 =  hwMap.servo["outTakeDrop2"] ?: throw Exception("Failed to find servo outTakeDrop2")
+    val SERVODROP1: Double = 0.5
+    val SERVOCLOSE1: Double = 0.0
+    val SERVODROP2: Double = 1.0
+    val SERVOCLOSE2: Double = 0.5
 
     val THRESHOLD: Int = 10 /// TODO: To be tested
 
@@ -44,9 +47,13 @@ class OutTake(hwMap: HardwareMap) {
     }
 
     fun dropMinerals(drop: Boolean) {
-        dropServo.position = when(drop) {
-            true -> SERVODROP
-            false -> SERVOCLOSE
+        dropServo1.position = when(drop) {
+            true -> SERVODROP1
+            false -> SERVOCLOSE1
+        }
+        dropServo2.position = when(drop) {
+            true -> SERVODROP2
+            false -> SERVOCLOSE2
         }
     }
 
@@ -55,7 +62,8 @@ class OutTake(hwMap: HardwareMap) {
     }
 
     fun close() {
-        dropServo.position = SERVOCLOSE
+        dropServo1.position = SERVOCLOSE1
+        dropServo2.position = SERVOCLOSE2
         outTakeSlider.targetPosition = SLIDERCLOSE
         outTakeSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
         outTakeSlider.power = 0.8
