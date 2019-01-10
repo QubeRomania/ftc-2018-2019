@@ -19,16 +19,16 @@ class OutTake(hwMap: HardwareMap) {
 
     val dropServo1 =  hwMap.servo["outTakeDrop1"] ?: throw Exception("Failed to find servo outTakeDrop1")
     val dropServo2 =  hwMap.servo["outTakeDrop2"] ?: throw Exception("Failed to find servo outTakeDrop2")
-    val SERVODROP1: Double = 0.5
-    val SERVOCLOSE1: Double = 0.0
-    val SERVODROP2: Double = 1.0
-    val SERVOCLOSE2: Double = 0.5
+    val SERVODROP1: Double = 30.0
+    val SERVOCLOSE1: Double = 160.0
+    val SERVODROP2: Double = 0.0
+    val SERVOCLOSE2: Double = 160.0
 
     val THRESHOLD: Int = 10 /// TODO: To be tested
 
     init {
         outTakeSlider.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
-        outTakeSlider.direction = DcMotorSimple.Direction.REVERSE
+        outTakeSlider.direction = DcMotorSimple.Direction.FORWARD
         outTakeSlider.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         outTakeSlider.mode = DcMotor.RunMode.RUN_USING_ENCODER
 
