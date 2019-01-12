@@ -24,9 +24,9 @@ class Intake (hwMap: HardwareMap) {
 
         rotateMotor.direction = DcMotorSimple.Direction.FORWARD
         rotateMotor.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.BRAKE
-        stopRotate()
         rotateMotor.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         rotateMotor.mode = DcMotor.RunMode.RUN_USING_ENCODER
+        stopRotate()
 
         maturicaServo1.direction = DcMotorSimple.Direction.FORWARD
         maturicaServo2.direction = DcMotorSimple.Direction.REVERSE
