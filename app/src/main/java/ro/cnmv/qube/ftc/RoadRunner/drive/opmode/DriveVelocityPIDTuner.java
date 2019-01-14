@@ -59,6 +59,7 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
 
         NanoClock clock = NanoClock.system();
 
+        telemetry.addData("PID", MOTOR_PID);
         telemetry.log().add("Ready!");
         telemetry.update();
         telemetry.clearAll();

@@ -52,7 +52,7 @@ class Gamepad(private val gp: Gamepad) {
 
     fun checkToggle(button : Button): Boolean {
         val pressed = checkHold(button)
-        val ok = pressed && lastStates[button] != pressed
+        val ok = pressed && (lastStates[button] != pressed)
         lastStates[button] = pressed
         return ok
     }

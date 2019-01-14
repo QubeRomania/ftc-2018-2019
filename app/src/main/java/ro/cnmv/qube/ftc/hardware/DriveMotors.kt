@@ -15,10 +15,10 @@ class DriveMotors(hwMap: HardwareMap) {
     companion object {
         /// A list of all the motors to initialize.
         val MOTORS = arrayOf(
-                Pair("front_left_motor", Direction.REVERSE),
-                Pair("front_right_motor", Direction.FORWARD),
-                Pair("back_left_motor", Direction.REVERSE),
-                Pair("back_right_motor", Direction.FORWARD)
+                Pair("leftFront", Direction.REVERSE),
+                Pair("rightFront", Direction.FORWARD),
+                Pair("leftRear", Direction.REVERSE),
+                Pair("rightRear", Direction.FORWARD)
         )
     }
 
