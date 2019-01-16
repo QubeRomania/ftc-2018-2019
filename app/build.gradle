@@ -22,7 +22,7 @@ android {
         }
     }
     packagingOptions {
-        // Exclude all non-Android platforms
+        // Exclude all non-Android platformskotlin_version
         exclude 'org/bytedeco/javacpp/windows-x86/**'
         exclude 'org/bytedeco/javacpp/windows-x86_64/**'
         exclude 'org/bytedeco/javacpp/macosx-x86/**'

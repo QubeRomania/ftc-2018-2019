@@ -15,6 +15,7 @@ class CompleteDrive: OpMode() {
 
         val gp1 = Gamepad(gamepad1)
         val gp2 = Gamepad(gamepad2)
+        var isTransfer:Boolean = true
 
         waitForStart()
 
@@ -31,7 +32,9 @@ class CompleteDrive: OpMode() {
             ///Intake
             intake.moveSlider((gp1.right_trigger - gp1.left_trigger).toDouble())
 
-            if (gp1.checkToggle(Gamepad.Button.A)) intake.rotate(Intake.ModeRotate.TRANSFER)
+            if (gp1.checkToggle(Gamepad.Button.A)) isTransfer = !isTransfer
+
+            if (isTransfer) intake.rotate(Intake.ModeRotate.TRANSFER)
             else intake.rotate(Intake.ModeRotate.OPEN)
 
             if (gp2.left_stick_y > 0.5) intake.maturica(Intake.ModeMaturica.IN)
