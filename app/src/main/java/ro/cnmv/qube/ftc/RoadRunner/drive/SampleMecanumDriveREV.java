@@ -21,7 +21,7 @@ import java.util.List;
 public class SampleMecanumDriveREV extends SampleMecanumDriveBase {
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
-    private BNO055IMU imu;
+    public BNO055IMU imu;
 
     public SampleMecanumDriveREV(HardwareMap hardwareMap) {
         super();

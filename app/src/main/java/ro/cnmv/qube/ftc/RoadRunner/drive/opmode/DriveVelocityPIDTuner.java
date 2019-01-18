@@ -42,7 +42,7 @@ public class DriveVelocityPIDTuner extends LinearOpMode {
      * If true, the kV value is computed from the free speed determined by the manufacturer (likely
      * an overestimate of the actual value. If false, the value from DriveConstants.kV is used.
      */
-    public static boolean USE_THEORETICAL_KV = true;
+    public static boolean USE_THEORETICAL_KV = false;
 
     @Override
     public void runOpMode() {
