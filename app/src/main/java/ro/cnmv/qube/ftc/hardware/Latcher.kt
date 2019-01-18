@@ -38,6 +38,12 @@ class Latcher (hwMap : HardwareMap) {
         latchMotor.power = 0.8
     }
 
+    fun runLatchToPosition(position: Int, power: Double) {
+        latchMotor.targetPosition = position
+        latchMotor.power = power
+        latchMotor.mode = DcMotor.RunMode.RUN_TO_POSITION
+    }
+
     fun stop() {
         latchMotor.power = 0.0
     }
