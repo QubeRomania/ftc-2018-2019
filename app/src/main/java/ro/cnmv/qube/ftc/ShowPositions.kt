@@ -8,6 +8,7 @@ import ro.cnmv.qube.ftc.hardware.Hardware
 class ShowPositions:OpMode() {
 
     override fun Hardware.run() {
+        motors.resetPosition()
         waitForStart()
         while (opModeIsActive()) {
             telemetry.addData("Intake Position", intake.getIntakePosiiton())
