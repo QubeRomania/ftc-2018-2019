@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.hardware.PIDCoefficients
 import com.qualcomm.robotcore.util.ElapsedTime
 import com.qualcomm.robotcore.util.Range
 import ro.cnmv.qube.ftc.hardware.Hardware
+import kotlin.math.abs
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
@@ -74,7 +75,11 @@ abstract class OpMode: LinearOpMode() {
         val pid = PIDCoefficients(P, I, D)
 
         // Determine the rotation error.
-        val error = (targetHeading - hw.imu.heading) / 90.0
+        var delta = targetHeading - hw.imu.heading
+
+        if(delta.absoluteValue > 180.0) delta = -delta.sign*360.0 + delta
+
+        val error = delta / 90.0
 
         // Calculate the PID.
         val correction = (pid.p * error)
@@ -93,7 +98,11 @@ abstract class OpMode: LinearOpMode() {
         val pid = PIDCoefficients(P2, I2, D2)
 
         // Determine the rotation error.
-        val error = (targetHeading - hw.imu.heading) / 90.0
+        var delta = targetHeading - hw.imu.heading
+
+        if(delta.absoluteValue > 180.0) delta = -delta.sign*360.0 + delta
+
+        val error = delta / 90.0
 
         // Calculate the PID.
         val correction = (pid.p * error)
@@ -111,7 +120,8 @@ abstract class OpMode: LinearOpMode() {
     fun goTo(distanceCm: Double, targetHeading: Double) {
         with (hw.motors) {
             resetPosition()
-            setTargetPosition(distanceCm.toInt())
+            val target = distanceCm * 17.5
+            setTargetPosition(target.toInt())
             var maxSpeed = 0.0
             runToPosition()
             while (opModeIsActive() && areBusy) {
@@ -123,6 +133,7 @@ abstract class OpMode: LinearOpMode() {
                 printPosition(telemetry)
                 telemetry.update()
             }
+
             stop()
             runWithConstantVelocity()
         }
@@ -149,7 +160,7 @@ abstract class OpMode: LinearOpMode() {
 
             val absError = (targetHeading - hw.imu.heading).absoluteValue
 
-            if (absError > 0.0)
+            if (absError > 0.1)
                 lastTime = timer.milliseconds()
 
             telemetry.addData("Current", "%.2f", hw.imu.heading)

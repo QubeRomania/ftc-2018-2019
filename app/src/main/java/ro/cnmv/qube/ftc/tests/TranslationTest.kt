@@ -11,7 +11,7 @@ public class TranslationTest : OpMode() {
     override fun Hardware.run() {
         var currentPosition = 0.0
         val gp1 = Gamepad(gamepad1)
-        val value = 100
+        val value = 10
         var curCoef = 0
 
         waitForStart()
