@@ -1,9 +1,7 @@
-package ro.cnmv.qube.ftc.Autonomy
+package ro.cnmv.qube.ftc.autonomy
 
 import ro.cnmv.qube.ftc.OpMode
-import ro.cnmv.qube.ftc.hardware.Hardware
 import ro.cnmv.qube.ftc.hardware.sensors.TFOD
-
 
 abstract class AutonomyBase : OpMode() {
     val tfod: TFOD by lazy {
@@ -16,22 +14,18 @@ abstract class AutonomyBase : OpMode() {
 
     }
 
-    fun followTrajectory(steps : ArrayList<Pair<Double, Double>>){
+    protected fun followTrajectory(steps: ArrayList<Pair<Double, Double>>){
         steps.forEach { follow(it) }
     }
 
-    fun follow(step : Pair< Double, Double >) {
-        val(distance, heading) = step
+    private fun follow(step: Pair<Double, Double>) {
+        val (distance, heading) = step
 
-        if(distance == 0.0) {
-            rotateTo(heading)
-        } else {
-            goTo(distance, heading)
-        }
+        goTo(distance, heading)
     }
 
     fun sampling() {
-        val now = tfod.getPosition()
+        val now = tfod.position
         if(now != TFOD.Positions.UNKNOWN) goldPosition = now
     }
 

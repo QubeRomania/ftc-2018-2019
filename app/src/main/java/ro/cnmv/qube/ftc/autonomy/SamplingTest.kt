@@ -1,4 +1,4 @@
-package ro.cnmv.qube.ftc.Autonomy
+package ro.cnmv.qube.ftc.autonomy
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import ro.cnmv.qube.ftc.hardware.Hardware

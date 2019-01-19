@@ -118,6 +118,7 @@ abstract class OpMode: LinearOpMode() {
     }
 
     fun goTo(distanceCm: Double, targetHeading: Double) {
+        rotateTo(targetHeading)
         with (hw.motors) {
             resetPosition()
             val target = distanceCm * 17.5
@@ -171,8 +172,6 @@ abstract class OpMode: LinearOpMode() {
         hw.motors.stop()
     }
 }
-
-
 
 fun LinearOpMode.waitMillis(millis: Long) {
     val timer = ElapsedTime()

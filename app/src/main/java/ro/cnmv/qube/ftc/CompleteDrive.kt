@@ -7,20 +7,15 @@ import ro.cnmv.qube.ftc.hardware.Latcher
 import java.lang.Math.atan2
 
 @TeleOp(name = "CompleteDrive", group = "Main")
-
 class CompleteDrive: OpMode() {
-
-
     override fun Hardware.run() {
-
         val gp1 = Gamepad(gamepad1)
         val gp2 = Gamepad(gamepad2)
-        var isTransfer:Boolean = true
+        var isTransfer = true
 
         waitForStart()
 
         while(opModeIsActive()) {
-
             val endGame = gp1.checkToggle(Gamepad.Button.START)
             // OutTake
             if(endGame) {
@@ -57,7 +52,7 @@ class CompleteDrive: OpMode() {
     }
 
     /// The direction in which the robot is translating.
-    val direction: Double
+    private val direction: Double
         get() {
             val x = gamepad1.left_stick_x.toDouble()
             val y = -gamepad1.left_stick_y.toDouble()
@@ -66,16 +61,15 @@ class CompleteDrive: OpMode() {
         }
 
     /// Rotation around the robot's Z axis.
-    val rotation: Double
+    private val rotation: Double
         get() = -gamepad1.right_stick_x.toDouble()
 
     /// Translation speed.
-    val speed: Double
+    private val speed: Double
         get() {
             val x = gamepad1.left_stick_x.toDouble()
             val y = gamepad1.left_stick_y.toDouble()
 
             return Math.sqrt((x * x) + (y * y))
         }
-
 }

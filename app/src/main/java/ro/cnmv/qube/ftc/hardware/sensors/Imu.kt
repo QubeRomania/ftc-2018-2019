@@ -4,9 +4,9 @@ import com.qualcomm.hardware.bosch.BNO055IMU
 import com.qualcomm.robotcore.hardware.HardwareMap
 
 class Imu (hwMap: HardwareMap){
-    val imu = hwMap.get(BNO055IMU::class.java, "imu")
+    val imu = hwMap.get(BNO055IMU::class.java, "imu")!!
 
-    val heading get() = imu.getAngularOrientation().firstAngle
+    val heading get() = imu.angularOrientation.firstAngle
 
     init {
         val parameters = BNO055IMU.Parameters()
