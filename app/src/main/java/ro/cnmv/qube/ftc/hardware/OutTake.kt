@@ -10,21 +10,26 @@ import com.qualcomm.robotcore.hardware.HardwareMap
  * This class controls the hardware for placing minerals in the lander.
  */
 class OutTake(hwMap: HardwareMap) {
+    companion object {
+        const val SLIDER_OPEN = 2000
+        const val SLIDER_CLOSE = 0
+        const val MULTIPLIER = 10
+
+        const val SERVO_DROP1 = 30.0
+        const val SERVO_CLOSE1 = 160.0
+        const val SERVO_DROP2 = 0.0
+        const val SERVO_CLOSE2 = 160.0
+
+        // TODO: To be tested
+        const val THRESHOLD = 10
+    }
+
     val outTakeSlider = hwMap.dcMotor["outTakeSlider"] ?: throw Exception("Failed to find motor outTakeSlider")
 
     var outTakePosition: Int = 0
-    val SLIDEROPEN: Int = 2000
-    val SLIDERCLOSE: Int = 0
-    val MULTIPLIER: Int = 10
 
     val dropServo1 =  hwMap.servo["outTakeDrop1"] ?: throw Exception("Failed to find servo outTakeDrop1")
     val dropServo2 =  hwMap.servo["outTakeDrop2"] ?: throw Exception("Failed to find servo outTakeDrop2")
-    val SERVODROP1: Double = 30.0
-    val SERVOCLOSE1: Double = 160.0
-    val SERVODROP2: Double = 0.0
-    val SERVOCLOSE2: Double = 160.0
-
-    val THRESHOLD: Int = 10 /// TODO: To be tested
 
     init {
         outTakeSlider.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
@@ -37,9 +42,9 @@ class OutTake(hwMap: HardwareMap) {
     }
 
     fun moveSlider(power: Double) {
-        outTakePosition += (power*MULTIPLIER).toInt()
-        outTakePosition = Math.min(outTakePosition, SLIDEROPEN)
-        outTakePosition = Math.max(outTakePosition, SLIDERCLOSE)
+        outTakePosition += (power * MULTIPLIER).toInt()
+        outTakePosition = Math.min(outTakePosition, SLIDER_OPEN)
+        outTakePosition = Math.max(outTakePosition, SLIDER_CLOSE)
 
         outTakeSlider.targetPosition = outTakePosition
         outTakeSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
@@ -48,12 +53,12 @@ class OutTake(hwMap: HardwareMap) {
 
     fun dropMinerals(drop: Boolean) {
         dropServo1.position = when(drop) {
-            true -> SERVODROP1
-            false -> SERVOCLOSE1
+            true -> SERVO_DROP1
+            false -> SERVO_CLOSE1
         }
         dropServo2.position = when(drop) {
-            true -> SERVODROP2
-            false -> SERVOCLOSE2
+            true -> SERVO_DROP2
+            false -> SERVO_CLOSE2
         }
     }
 
@@ -62,12 +67,13 @@ class OutTake(hwMap: HardwareMap) {
     }
 
     fun close() {
-        dropServo1.position = SERVOCLOSE1
-        dropServo2.position = SERVOCLOSE2
-        outTakeSlider.targetPosition = SLIDERCLOSE
+        dropServo1.position = SERVO_CLOSE1
+        dropServo2.position = SERVO_CLOSE2
+        outTakeSlider.targetPosition = SLIDER_CLOSE
         outTakeSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
         outTakeSlider.power = 0.8
     }
+
     fun isClosed(): Boolean {
         return outTakeSlider.currentPosition < THRESHOLD
     }
