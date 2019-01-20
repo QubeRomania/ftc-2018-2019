@@ -74,7 +74,7 @@ public class TFOD {
      * Once you've obtained a license key, copy the string from the Vuforia web site
      * and paste it in to your code on the next line, between the double quotes.
      */
-    private static final String VUFORIA_KEY = "AVVjWu3/////AAAAGdsr5gBC+UssmiGXoEvaSklmeAVfXdWZjUNR2gbOBgC0kp6Do6J3i1FIgwwlpWTgUgGtotRa+mZH5uJSNVWk5T8UMU7p38lmYOGRFOD5pXXJen9S2ltuwpR4C1QWHxQTHDxP6ubRgdEHj1K2Qhpw82ZPllmN7ZsAUacC7/AyPakH1L2O8aw7KBQr98D8HMPIC3GLuJQ2ZzWCNcll+LvP6YmIZcwH0U6CtwgDUTsVpJvcR2QFvFhbh972AAMZ2b7vuNmubrDHizY11qWico+9ovgN5ADLi2IztLhNZG3MLQLrsOa0wAKt4yMKPk2uV8JCTTVkZeqBhKaIPZMRTQuP3Lcvrco5PAi6jVRZ4WhGXhHc";
+    private static final String VUFORIA_KEY = "AVPyTWb/////AAABmXxXcGEYUkDNrYEkMF5L60NdMawUPYkZayKrCfI1yvapa48Dcy6C2hSr/SUA0zvsk46EPjTwqiFVYP26I/aimpQz/om7OJeQgu1xLihC6GqGKDUqt8sVp6/GPMuNG5/Ed105UD7mRXic1KA9ffoQjrLCBYNuBsFgUxaLGTmbeKolGGosPuNs5TkdY2tRV3cgKYSgpcXpW43/lSS09Mbinznj+ql1rP3aW/AscSHjlZWKXND7KY8tslxiUrlXpXgAhuTPottYl/9GZ7dowgN8la4GxHiCyyQy766rJfmkscpiViPIkUPJxu1G+O1THaCQJK9oiQYoH8qEBfXDs2Siw2aP1mYWONEK/BYJNiwJ36N4";
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -116,31 +116,30 @@ public class TFOD {
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
                 telemetry.addData("# Object Detected", updatedRecognitions.size());
-                if (updatedRecognitions.size() == 3) {
+                if (updatedRecognitions.size() == 2) {
 
                     int goldMineralX = -1;
-                    int silverMineral1X = -1;
-                    int silverMineral2X = -1;
+                    int silverMineralX = -1;
                     for (Recognition recognition : updatedRecognitions) {
                         if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                             goldMineralX = (int) recognition.getLeft();
-                        } else if (silverMineral1X == -1) {
-                            silverMineral1X = (int) recognition.getLeft();
                         } else {
-                            silverMineral2X = (int) recognition.getLeft();
+                            silverMineralX = (int) recognition.getLeft();
                         }
                     }
-                    if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-                        if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                    if (goldMineralX != -1 && silverMineralX != -1) {
+                        if (goldMineralX < silverMineralX) {
                             telemetry.addData("Gold Mineral Position", "Left");
                             ret = Positions.LEFT;
-                        } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                            telemetry.addData("Gold Mineral Position", "Right");
-                            ret = Positions.RIGHT;
                         } else {
                             telemetry.addData("Gold Mineral Position", "Center");
                             ret = Positions.CENTER;
                         }
+                    }
+
+                    if(goldMineralX == -1) {
+                        telemetry.addData("Gold Mineral Position", "Right");
+                        ret = Positions.RIGHT;
                     }
                 }
             }
@@ -160,11 +159,11 @@ public class TFOD {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        //parameters.cameraDirection = CameraDirection.BACK;
         parameters.cameraName = hwMap.get(WebcamName.class, "Webcam 1");
 
         //  Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
 
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }
@@ -174,12 +173,9 @@ public class TFOD {
      */
     public void initTfod(HardwareMap hardwareMap) {
         int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-            "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-
+                "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-
         tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, vuforia);
-
         tfod.loadModelFromAsset(TFOD_MODEL_ASSET, LABEL_GOLD_MINERAL, LABEL_SILVER_MINERAL);
     }
 

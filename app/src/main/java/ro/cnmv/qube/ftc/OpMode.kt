@@ -1,10 +1,12 @@
 package ro.cnmv.qube.ftc
 
+import com.acmerobotics.roadrunner.drive.Drive
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.PIDCoefficients
 import com.qualcomm.robotcore.util.ElapsedTime
 import com.qualcomm.robotcore.util.Range
 import ro.cnmv.qube.ftc.hardware.Hardware
+import ro.cnmv.qube.ftc.hardware.sensors.REVDistanceSensor
 import kotlin.math.absoluteValue
 import kotlin.math.sign
 
@@ -18,7 +20,11 @@ abstract class OpMode: LinearOpMode() {
 
         preInit()
 
-        waitForStart()
+        while(!isStarted && !isStopRequested) {
+            preInitLoop()
+        }
+
+        if(isStopRequested) return
 
         if (!opModeIsActive())
             return
@@ -30,48 +36,15 @@ abstract class OpMode: LinearOpMode() {
 
     open fun preInit() {}
 
+    open fun preInitLoop() {}
+
     /// Runs the op mode.
     abstract fun Hardware.run()
 
-    var P = 0.8
-    var I = 0.1
-    var D = 1.5
-    var P2 = 1.8
-    var I2 = 0.3
-    var D2 = 1.0
-    val delta:Double = 0.1
-
-    fun updatePID (gamepad: Gamepad, curCoef: Int) {
-
-        if (gamepad.checkToggle(Gamepad.Button.RIGHT_BUMPER)) {
-            if (curCoef == 0) P += delta
-            else if (curCoef == 1) I += delta
-            else D += delta
-        }
-        else if (gamepad.checkToggle(Gamepad.Button.LEFT_BUMPER)) {
-            if (curCoef == 0) P -= delta
-            else if (curCoef == 1) I -= delta
-            else D -= delta
-        }
-    }
-
-    fun updateDrivePID (gamepad: Gamepad, curCoef: Int) {
-
-        if (gamepad.checkToggle(Gamepad.Button.RIGHT_BUMPER)) {
-            if (curCoef == 0) P2 += delta
-            else if (curCoef == 1) I2 += delta
-            else D2 += delta
-        }
-        else if (gamepad.checkToggle(Gamepad.Button.LEFT_BUMPER)) {
-            if (curCoef == 0) P2 -= delta
-            else if (curCoef == 1) I2 -= delta
-            else D2 -= delta
-        }
-    }
     private var lastRotationError = 0.0
 
     fun getHeadingCorrection(targetHeading: Double): Double {
-        val pid = PIDCoefficients(P, I, D)
+        val pid = PIDCoefficients(RotatePID.p, RotatePID.i, RotatePID.d)
 
         // Determine the rotation error.
         var delta = targetHeading - hw.imu.heading
@@ -94,7 +67,7 @@ abstract class OpMode: LinearOpMode() {
     }
 
     fun getDriveHeadingCorrection(targetHeading: Double): Double {
-        val pid = PIDCoefficients(P2, I2, D2)
+        val pid = PIDCoefficients(DriveHeadingPID.p, DriveHeadingPID.i, DriveHeadingPID.d)
 
         // Determine the rotation error.
         var delta = targetHeading - hw.imu.heading
@@ -124,7 +97,7 @@ abstract class OpMode: LinearOpMode() {
             setTargetPosition(target.toInt())
             var maxSpeed = 0.0
             runToPosition()
-            while (opModeIsActive() && areBusy) {
+            while (opModeIsActive() && areBusy) {0
                 maxSpeed = Math.min(maxSpeed + 0.01, 0.4)
                 val correction = getDriveHeadingCorrection(targetHeading) * distanceCm.sign
                 telemetry.addData("Heading error", correction)
@@ -137,6 +110,39 @@ abstract class OpMode: LinearOpMode() {
             stop()
             runWithConstantVelocity()
         }
+    }
+
+    fun strafe(distanceCm: Double, targetHeading: Double){
+        val pid = PIDCoefficients(StrafePID.p, StrafePID.i, StrafePID.d)
+
+        with(hw.motors) {
+            var lastError = 0.0
+            var error = 0.0
+            val timer = ElapsedTime()
+
+            val totalTime = ElapsedTime()
+            while(timer.milliseconds() < 300 && opModeIsActive() && totalTime.milliseconds() < 5000) {
+                lastError = error
+                error = (hw.distanceSensor.distance - distanceCm)
+
+                val speed = (pid.p*error + pid.i*(error + lastError) + pid.d*(error - lastError)) / StrafePID.ratio
+
+                val correction = getDriveHeadingCorrection(targetHeading)
+
+                move(90.0, speed, correction)
+
+                telemetry.addData("DistanceError", error)
+                telemetry.addData("Speed", speed)
+                telemetry.addData("HeadingCorrection", correction)
+
+                telemetry.update()
+
+                if(error > 1.0) timer.reset()
+            }
+        }
+
+        return
+
     }
 
     fun runWithVelocity(velocity: Double, time: Long) {

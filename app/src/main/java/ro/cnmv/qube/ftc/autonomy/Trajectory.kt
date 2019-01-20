@@ -23,4 +23,12 @@ object Trajectory {
                 Pair(distance3, heading3),
                 Pair(distance4, heading4),
                 Pair(distance5, heading5))
+
+    fun reversed() : ArrayList<Pair<Double, Double>>
+            = arrayListOf(
+            Pair(-distance5, heading5),
+            Pair(-distance4, heading4),
+            Pair(-distance3, heading3),
+            Pair(-distance2, heading2),
+            Pair(-distance1, heading1))
 }
