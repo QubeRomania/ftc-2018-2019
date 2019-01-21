@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous
 import com.qualcomm.robotcore.util.ElapsedTime
 import ro.cnmv.qube.ftc.Gamepad
 import ro.cnmv.qube.ftc.OpMode
+import ro.cnmv.qube.ftc.StrafePID
 import ro.cnmv.qube.ftc.hardware.Hardware
 
 @Config
@@ -18,8 +19,12 @@ class AutoStrafeTest : OpMode() {
         motors.runWithConstantVelocity()
         waitForStart()
         timer.reset()
+
+        var lastDist = 0.0
         while(opModeIsActive()) {
-            strafe(20.0, 0.0)
+            if (StrafePID.dist == lastDist) idle()
+            lastDist = StrafePID.dist
+            strafe(StrafePID.dist, 0.0)
         }
     }
 }

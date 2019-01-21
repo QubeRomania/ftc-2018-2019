@@ -11,9 +11,13 @@ import kotlin.math.absoluteValue
 import kotlin.math.sign
 
 abstract class OpMode: LinearOpMode() {
+
     protected val hw by lazy {
         Hardware(hardwareMap, this)
     }
+
+    val maxTimePerRotate = 1300
+    val maxTimePerStrafe = 1500
 
     final override fun runOpMode() {
         hw.stop()
@@ -60,8 +64,8 @@ abstract class OpMode: LinearOpMode() {
 
         lastRotationError = error
 
-        if (correction.absoluteValue < 0.1 && correction.absoluteValue > 0.001)
-            return 0.1 * correction.sign
+        if (correction.absoluteValue < RotatePID.threshold)
+            return RotatePID.slow * correction.sign
 
         return Range.clip(correction, -1.0, 1.0)
     }
@@ -82,23 +86,20 @@ abstract class OpMode: LinearOpMode() {
         + (pid.d * (error - lastRotationError))
 
         lastRotationError = error
-
-        if (correction.absoluteValue < 0.1 && correction.absoluteValue > 0.001)
-            return 0.1 * correction.sign
-
         return Range.clip(correction, -1.0, 1.0)
     }
 
     fun goTo(distanceCm: Double, targetHeading: Double) {
-        rotateTo(targetHeading)
+        if((targetHeading - hw.imu.heading).absoluteValue > 5)
+            rotateTo(targetHeading)
         with (hw.motors) {
             resetPosition()
             val target = distanceCm * 17.5
             setTargetPosition(target.toInt())
             var maxSpeed = 0.0
             runToPosition()
-            while (opModeIsActive() && areBusy) {0
-                maxSpeed = Math.min(maxSpeed + 0.01, 0.4)
+            while (opModeIsActive() && areBusy) {
+                maxSpeed = Math.min(maxSpeed + 0.1, 0.7)
                 val correction = getDriveHeadingCorrection(targetHeading) * distanceCm.sign
                 telemetry.addData("Heading error", correction)
                 move(0.0, maxSpeed, correction)
@@ -121,7 +122,7 @@ abstract class OpMode: LinearOpMode() {
             val timer = ElapsedTime()
 
             val totalTime = ElapsedTime()
-            while(timer.milliseconds() < 300 && opModeIsActive() && totalTime.milliseconds() < 5000) {
+            while(timer.milliseconds() < 1000 && opModeIsActive()) {
                 lastError = error
                 error = (hw.distanceSensor.distance - distanceCm)
 
@@ -138,11 +139,10 @@ abstract class OpMode: LinearOpMode() {
                 telemetry.update()
 
                 if(error > 1.0) timer.reset()
+                if(totalTime.milliseconds() > maxTimePerStrafe) break
             }
         }
-
         return
-
     }
 
     fun runWithVelocity(velocity: Double, time: Long) {
@@ -166,13 +166,16 @@ abstract class OpMode: LinearOpMode() {
 
             val absError = (targetHeading - hw.imu.heading).absoluteValue
 
-            if (absError > 0.1)
+            if (absError > 1.0)
                 lastTime = timer.milliseconds()
 
             telemetry.addData("Current", "%.2f", hw.imu.heading)
             telemetry.addData("Target", "%.2f", targetHeading)
             telemetry.addData("Rotation Correction", "%.2f", correction)
             telemetry.update()
+
+            if (timer.milliseconds() > maxTimePerRotate) break;
+
         } while (opModeIsActive() && timer.milliseconds() - lastTime < 300)
         hw.motors.stop()
     }

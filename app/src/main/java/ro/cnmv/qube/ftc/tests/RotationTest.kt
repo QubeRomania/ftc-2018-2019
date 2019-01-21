@@ -4,31 +4,21 @@ import android.text.style.UpdateAppearance
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp
 import ro.cnmv.qube.ftc.Gamepad
 import ro.cnmv.qube.ftc.OpMode
+import ro.cnmv.qube.ftc.RotatePID
 import ro.cnmv.qube.ftc.hardware.Hardware
+import ro.cnmv.qube.ftc.waitMillis
 
 @TeleOp(name = "RotationTest", group = "Tests")
 public class RotationTest : OpMode() {
 
     override fun Hardware.run() {
-        var currentAngle = 0.0
-        val gp1 = Gamepad(gamepad1)
-
-        val value = 5
-
         waitForStart()
 
+        var lastAngle = 0.0
         while (opModeIsActive()) {
-
-            if (gp1.checkToggle(Gamepad.Button.A)) currentAngle += value
-            if (gp1.checkToggle(Gamepad.Button.B)) currentAngle -= value
-            if (gp1.checkToggle(Gamepad.Button.Y))
-                rotateTo(currentAngle)
-
-            telemetry.addData("First", hw.imu.imu.getAngularOrientation().firstAngle)
-            telemetry.addData("Second", hw.imu.imu.getAngularOrientation().secondAngle)
-            telemetry.addData("Third", hw.imu.imu.getAngularOrientation().thirdAngle)
-            telemetry.addData("Target", currentAngle)
-            telemetry.update()
+            rotateTo(RotatePID.angle)
+            while (RotatePID.angle == lastAngle) idle()
+            lastAngle = RotatePID.angle
         }
     }
 }

@@ -7,7 +7,6 @@ import ro.cnmv.qube.ftc.hardware.Hardware
 import ro.cnmv.qube.ftc.hardware.Intake
 
 @TeleOp (name = "Intake Test", group = "Tests")
-
 class IntakeTest: OpMode() {
 
     override fun Hardware.run() {
@@ -27,6 +26,8 @@ class IntakeTest: OpMode() {
             else if (gp1.left_stick_y < -0.5) intake.maturica(Intake.ModeMaturica.OUT)
 
             telemetry.addData("Slider position", intake.slideMotor.currentPosition)
+            telemetry.addData("Target", intake.pos)
+            telemetry.addData("Y", gp1.left_stick_y)
             telemetry.update()
         }
 

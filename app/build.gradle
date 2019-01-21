@@ -37,4 +37,5 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "org.bytedeco:javacv-platform:1.4.2"
     implementation "org.bytedeco.javacpp-presets:opencv:3.4.2-1.4.2:android-arm"
+    implementation 'com.acmerobotics.dashboard:dashboard:0.2.2'
 }
