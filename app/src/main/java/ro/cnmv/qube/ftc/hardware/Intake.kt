@@ -89,8 +89,10 @@ class Intake (hwMap: HardwareMap) {
 
     val OPEN_POSITION: Int = 890
     val CLOSE_POSITION: Int =  0
-    val TRANSFER_POSITION: Int = 150
+    val TRANSFER_POSITION: Int = 250
     val MODE_POWER: Double = 0.8
+    val UP_POWER: Double = 0.2
+    val DOWN_POWER: Double = 0.1
 
     fun rotate(mode: ModeRotate) {
         val pos = when(mode) {
@@ -98,7 +100,12 @@ class Intake (hwMap: HardwareMap) {
             ModeRotate.CLOSE -> CLOSE_POSITION
             ModeRotate.TRANSFER -> TRANSFER_POSITION
         }
-        runRotateToPosition(pos, MODE_POWER)
+
+        val power = when(mode) {
+            ModeRotate.OPEN -> DOWN_POWER
+            else -> UP_POWER
+        }
+        runRotateToPosition(pos, power)
     }
 
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

@@ -15,11 +15,13 @@ class OutTake(hwMap: HardwareMap) {
         const val SLIDER_CLOSE = 0
         const val MULTIPLIER = 10
 
-        const val SERVO_DROP1 = 30.0
-        const val SERVO_CLOSE1 = 160.0
-        const val SERVO_DROP2 = 0.0
-        const val SERVO_CLOSE2 = 160.0
+        const val SERVO_DROP_LEFT = 0.5
+        const val SERVO_CLOSE_LEFT = 0.0
+        const val SERVO_DROP_RIGHT = 0.45
+        const val SERVO_CLOSE_RIGHT = 1.0
 
+        const val SERVO_INTERMEDIATE_LEFT = 0.35
+        const val SERVO_INTERMEDIATE_RIGHT = 0.6
         // TODO: To be tested
         const val THRESHOLD = 10
     }
@@ -28,8 +30,8 @@ class OutTake(hwMap: HardwareMap) {
 
     var outTakePosition: Int = 0
 
-    val dropServo1 =  hwMap.servo["outTakeDrop1"] ?: throw Exception("Failed to find servo outTakeDrop1")
-    val dropServo2 =  hwMap.servo["outTakeDrop2"] ?: throw Exception("Failed to find servo outTakeDrop2")
+    val dropLeft =  hwMap.servo["dropLeft"] ?: throw Exception("Failed to find servo outTakeDrop1")
+    val dropRight =  hwMap.servo["dropRight"] ?: throw Exception("Failed to find servo outTakeDrop2")
 
     init {
         outTakeSlider.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
@@ -52,23 +54,27 @@ class OutTake(hwMap: HardwareMap) {
     }
 
     fun dropMinerals(drop: Boolean) {
-        dropServo1.position = when(drop) {
-            true -> SERVO_DROP1
-            false -> SERVO_CLOSE1
+        dropLeft.position = when(drop) {
+            true -> SERVO_DROP_LEFT
+            false -> SERVO_CLOSE_LEFT
         }
-        dropServo2.position = when(drop) {
-            true -> SERVO_DROP2
-            false -> SERVO_CLOSE2
+        dropRight.position = when(drop) {
+            true -> SERVO_DROP_RIGHT
+            false -> SERVO_CLOSE_RIGHT
         }
     }
 
+    fun intermediatePosition() {
+        dropLeft.position = SERVO_INTERMEDIATE_LEFT
+        dropRight.position = SERVO_INTERMEDIATE_RIGHT
+    }
     fun stop() {
         outTakeSlider.power = 0.0
     }
 
     fun close() {
-        dropServo1.position = SERVO_CLOSE1
-        dropServo2.position = SERVO_CLOSE2
+        dropLeft.position = SERVO_CLOSE_LEFT
+        dropRight.position = SERVO_CLOSE_RIGHT
         outTakeSlider.targetPosition = SLIDER_CLOSE
         outTakeSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
         outTakeSlider.power = 0.8
