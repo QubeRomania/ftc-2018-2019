@@ -5,6 +5,7 @@ import ro.cnmv.qube.ftc.hardware.Hardware
 import ro.cnmv.qube.ftc.hardware.Intake
 import ro.cnmv.qube.ftc.hardware.Latcher
 import java.lang.Math.atan2
+import kotlin.math.absoluteValue
 
 @TeleOp(name = "CompleteDrive", group = "Main")
 class CompleteDrive: OpMode() {
@@ -21,8 +22,9 @@ class CompleteDrive: OpMode() {
             if(endGame) {
                 outTake.close()
             } else {
-                outTake.moveSlider((gamepad2.right_trigger - gamepad2.left_trigger).toDouble())
-                outTake.dropMinerals(gp2.checkToggle(Gamepad.Button.A))
+                val power = (gamepad2.right_trigger - gamepad2.left_trigger).toDouble()
+                outTake.moveSlider(power)
+                if(power.absoluteValue < 0.1) outTake.dropMinerals(gp2.checkHold(Gamepad.Button.A))
             }
             ///Intake
             intake.moveSlider((gp1.right_trigger - gp1.left_trigger).toDouble())

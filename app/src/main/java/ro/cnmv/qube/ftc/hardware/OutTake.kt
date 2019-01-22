@@ -3,6 +3,7 @@ package ro.cnmv.qube.ftc.hardware
 import com.qualcomm.robotcore.hardware.DcMotor
 import com.qualcomm.robotcore.hardware.DcMotorSimple
 import com.qualcomm.robotcore.hardware.HardwareMap
+import kotlin.math.absoluteValue
 
 /**
  * OutTake subsystem.
@@ -11,17 +12,17 @@ import com.qualcomm.robotcore.hardware.HardwareMap
  */
 class OutTake(hwMap: HardwareMap) {
     companion object {
-        const val SLIDER_OPEN = 2000
+        const val SLIDER_OPEN = 8000
         const val SLIDER_CLOSE = 0
-        const val MULTIPLIER = 10
+        const val MULTIPLIER = 100
 
-        const val SERVO_DROP_LEFT = 0.5
+        const val SERVO_DROP_LEFT = 1.0
         const val SERVO_CLOSE_LEFT = 0.0
-        const val SERVO_DROP_RIGHT = 0.45
+        const val SERVO_DROP_RIGHT = 0.0
         const val SERVO_CLOSE_RIGHT = 1.0
 
-        const val SERVO_INTERMEDIATE_LEFT = 0.35
-        const val SERVO_INTERMEDIATE_RIGHT = 0.6
+        var SERVO_INTERMEDIATE_LEFT = dropPos.left
+        var SERVO_INTERMEDIATE_RIGHT = dropPos.right
         // TODO: To be tested
         const val THRESHOLD = 10
     }
@@ -51,6 +52,10 @@ class OutTake(hwMap: HardwareMap) {
         outTakeSlider.targetPosition = outTakePosition
         outTakeSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
         outTakeSlider.power = 0.8
+
+        if(power.absoluteValue > 0.1) {
+            intermediatePosition()
+        }
     }
 
     fun dropMinerals(drop: Boolean) {
@@ -77,7 +82,7 @@ class OutTake(hwMap: HardwareMap) {
         dropRight.position = SERVO_CLOSE_RIGHT
         outTakeSlider.targetPosition = SLIDER_CLOSE
         outTakeSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
-        outTakeSlider.power = 0.8
+        outTakeSlider.power = 1.0
     }
 
     fun isClosed(): Boolean {
