@@ -14,7 +14,9 @@ class OutTake(hwMap: HardwareMap) {
     companion object {
         const val SLIDER_OPEN = 8000
         const val SLIDER_CLOSE = 0
-        const val MULTIPLIER = 100
+        const val DELTA = 300
+        const val DELTA2 = 1000
+        const val MULTIPLIER = 40
 
         const val SERVO_DROP_LEFT = 1.0
         const val SERVO_CLOSE_LEFT = 0.0
@@ -52,10 +54,6 @@ class OutTake(hwMap: HardwareMap) {
         outTakeSlider.targetPosition = outTakePosition
         outTakeSlider.mode = DcMotor.RunMode.RUN_TO_POSITION
         outTakeSlider.power = 0.8
-
-        if(power.absoluteValue > 0.1) {
-            intermediatePosition()
-        }
     }
 
     fun dropMinerals(drop: Boolean) {
@@ -70,8 +68,13 @@ class OutTake(hwMap: HardwareMap) {
     }
 
     fun intermediatePosition() {
-        dropLeft.position = SERVO_INTERMEDIATE_LEFT
-        dropRight.position = SERVO_INTERMEDIATE_RIGHT
+        if (outTakePosition > DELTA && outTakePosition < SLIDER_OPEN - DELTA2) {
+            dropLeft.position = SERVO_INTERMEDIATE_LEFT
+            dropRight.position = SERVO_INTERMEDIATE_RIGHT
+        } else {
+            dropLeft.position = SERVO_CLOSE_LEFT
+            dropRight.position = SERVO_CLOSE_RIGHT
+        }
     }
     fun stop() {
         outTakeSlider.power = 0.0

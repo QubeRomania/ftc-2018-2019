@@ -25,31 +25,37 @@ abstract class AutonomyBase : OpMode() {
         goTo(distance, heading)
     }
 
-    fun sampling() {
-        val now = tfod.position
-        if(now != TFOD.Positions.UNKNOWN) goldPosition = now
-    }
-
     fun removeGold() {
-        val trajectory = when (goldPosition) {
-            TFOD.Positions.LEFT -> arrayListOf(
-                    Pair(15.0, 0.0),
-                    Pair(50.0, 30.0),
-                    Pair(-50.0, 30.0)
-            )
-            TFOD.Positions.RIGHT -> arrayListOf(
-                    Pair(15.0, 0.0),
-                    Pair(50.0, -30.0),
-                    Pair(-50.0, -30.0)
-            )
-            else -> arrayListOf(
-                    Pair(15.0, 0.0),
-                    Pair(50.0, 0.0),
-                    Pair(-50.0, 0.0)
-            )
+        followTrajectory(arrayListOf(Pair(15.0, 0.0)))
+
+
+        if (tfod.isGold()) {
+            followTrajectory(arrayListOf(
+                    Pair(40.0, 0.0),
+                    Pair(-40.0, 0.0)
+            ))
+
+            goldPosition = TFOD.Positions.CENTER
+            return
         }
 
-        followTrajectory(trajectory)
+        followTrajectory(arrayListOf(Pair(0.0, -35.0)))
+
+        if (tfod.isGold()) {
+            followTrajectory(arrayListOf(
+                    Pair(50.0, -35.0),
+                    Pair(-50.0, -35.0)
+            ))
+
+            goldPosition = TFOD.Positions.RIGHT
+            return
+        }
+
+        followTrajectory(arrayListOf(Pair(0.0, 35.0),
+                Pair(50.0, 35.0),
+                Pair(-50.0, 35.0)))
+
+        goldPosition = TFOD.Positions.LEFT
     }
 
 

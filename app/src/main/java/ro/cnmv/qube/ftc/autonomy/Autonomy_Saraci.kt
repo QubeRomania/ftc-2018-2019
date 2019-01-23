@@ -5,18 +5,16 @@ import com.qualcomm.robotcore.util.ElapsedTime
 import ro.cnmv.qube.ftc.hardware.Hardware
 import ro.cnmv.qube.ftc.hardware.sensors.TFOD
 import ro.cnmv.qube.ftc.waitMillis
-import java.util.*
 
-@Autonomous(name = "AutonomyRedDepo", group = "Autonomies")
-class AutonomyRedDepo: AutonomyBase() {
-
+@Autonomous
+class Autonomy_Saraci : AutonomyBase() {
     val strafeDist = 11.0
     val timer = ElapsedTime()
 
     override fun preInit() {
         // TODO: object detection
         goldPosition = TFOD.Positions.RIGHT
-        tfod.isGold()
+        val mata = tfod.isGold()
         hw.marker.marker.position = 0.0
     }
 
@@ -34,16 +32,22 @@ class AutonomyRedDepo: AutonomyBase() {
         removeGold()
         tfod.stop()
 
-        followTrajectory(arrayListOf(Pair(90.0, 65.0), Pair(0.0, -45.0)))
-        strafe (10.0, -45.0, maxTimePerStrafe)
-        followTrajectory(arrayListOf(Pair(100.0, -45.0)))
-        strafe(12.0, -45.0, maxTimePerStrafe)
-        followTrajectory(arrayListOf(Pair(0.0, -135.0)))
+        followTrajectory(arrayListOf(Pair(-90.0, -115.0), Pair(0.0, -45.0)))
+        strafe (11.0, -45.0, maxTimePerStrafe)
+        followTrajectory(arrayListOf(Pair(-120.0, -45.0)))
+        strafe(18.0, -45.0, maxTimePerStrafe)
+        followTrajectory(arrayListOf(Pair(0.0, 45.0)))
         dropMarker()
         waitMillis(500)
+
+        followTrajectory(when(goldPosition) {
+            TFOD.Positions.CENTER -> arrayListOf(Pair(-40.0, 45.0), Pair (40.0, 45.0))
+            TFOD.Positions.LEFT -> arrayListOf(Pair(-70.0,30.0), Pair (70.0, 30.0))
+            else -> arrayListOf(Pair(-50.0, 100.0), Pair(50.0, 100.0))
+        })
         followTrajectory(arrayListOf(Pair(0.0, -45.0)))
         strafe(10.0, -45.0, maxTimePerStrafe)
-        followTrajectory(arrayListOf(Pair(-180.0, -45.0)))
+        followTrajectory(arrayListOf(Pair(160.0, -45.0)))
 
         telemetry.addData("Elapsed time", timer.seconds())
         telemetry.update()

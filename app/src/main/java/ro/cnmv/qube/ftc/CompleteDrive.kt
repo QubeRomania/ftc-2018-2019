@@ -24,16 +24,21 @@ class CompleteDrive: OpMode() {
             } else {
                 val power = (gamepad2.right_trigger - gamepad2.left_trigger).toDouble()
                 outTake.moveSlider(power)
-                if(power.absoluteValue < 0.1) outTake.dropMinerals(gp2.checkHold(Gamepad.Button.A))
+
+                if(power.absoluteValue < 0.1 && gp2.checkHold(Gamepad.Button.A))outTake.dropMinerals(gp2.checkHold(Gamepad.Button.A))
+                if (!gp2.checkHold(Gamepad.Button.A)) outTake.intermediatePosition()
             }
             ///Intake
             intake.moveSlider((gp1.right_trigger - gp1.left_trigger).toDouble())
 
             if (gp1.checkToggle(Gamepad.Button.A)) isTransfer = !isTransfer
 
-            if (isTransfer) intake.rotate(Intake.ModeRotate.TRANSFER)
-            else intake.rotate(Intake.ModeRotate.OPEN)
-
+            if(outTake.outTakeSlider.currentPosition > 6000) {
+                intake.rotate(Intake.ModeRotate.DROP)
+            } else {
+                if (isTransfer) intake.rotate(Intake.ModeRotate.TRANSFER)
+                else intake.rotate(Intake.ModeRotate.OPEN)
+            }
             if (gp2.right_stick_y > 0.5) intake.maturica(Intake.ModeMaturica.IN)
             else if (gp2.right_stick_y <= 0.5 && gp2.right_stick_y >= -0.5) intake.maturica(Intake.ModeMaturica.STOP)
             else if (gp2.right_stick_y < -0.5) intake.maturica(Intake.ModeMaturica.OUT)

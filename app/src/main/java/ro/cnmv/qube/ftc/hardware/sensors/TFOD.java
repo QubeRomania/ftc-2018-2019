@@ -107,45 +107,26 @@ public class TFOD {
         }
     }
 
-    public Positions getPosition() {
-        Positions ret = Positions.UNKNOWN;
-
+    public boolean isGold() {
         if (tfod != null) {
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
             List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
                 telemetry.addData("# Object Detected", updatedRecognitions.size());
-                if (updatedRecognitions.size() == 2) {
-
-                    int goldMineralX = -1;
-                    int silverMineralX = -1;
+                if (updatedRecognitions.size() == 1) {
                     for (Recognition recognition : updatedRecognitions) {
                         if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                            goldMineralX = (int) recognition.getLeft();
+                            return true;
                         } else {
-                            silverMineralX = (int) recognition.getLeft();
+                            return false;
                         }
-                    }
-                    if (goldMineralX != -1 && silverMineralX != -1) {
-                        if (goldMineralX < silverMineralX) {
-                            telemetry.addData("Gold Mineral Position", "Left");
-                            ret = Positions.LEFT;
-                        } else {
-                            telemetry.addData("Gold Mineral Position", "Center");
-                            ret = Positions.CENTER;
-                        }
-                    }
-
-                    if(goldMineralX == -1) {
-                        telemetry.addData("Gold Mineral Position", "Right");
-                        ret = Positions.RIGHT;
                     }
                 }
             }
         }
 
-        return ret;
+        return false;
     }
 
     /**

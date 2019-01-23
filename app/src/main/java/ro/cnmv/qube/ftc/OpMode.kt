@@ -113,7 +113,7 @@ abstract class OpMode: LinearOpMode() {
         }
     }
 
-    fun strafe(distanceCm: Double, targetHeading: Double){
+    fun strafe(distanceCm: Double, targetHeading: Double, max_time: Int){
         val pid = PIDCoefficients(StrafePID.p, StrafePID.i, StrafePID.d)
 
         with(hw.motors) {
@@ -139,7 +139,7 @@ abstract class OpMode: LinearOpMode() {
                 telemetry.update()
 
                 if(error > 1.0) timer.reset()
-                if(totalTime.milliseconds() > maxTimePerStrafe) break
+                if(totalTime.milliseconds() > max_time) break
             }
         }
         return

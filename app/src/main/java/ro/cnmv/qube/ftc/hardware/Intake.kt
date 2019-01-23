@@ -84,12 +84,14 @@ class Intake (hwMap: HardwareMap) {
     enum class ModeRotate{
         OPEN,
         CLOSE,
-        TRANSFER
+        TRANSFER,
+        DROP
     }
 
     val OPEN_POSITION: Int = 850
     val CLOSE_POSITION: Int =  0
     val TRANSFER_POSITION: Int = 200
+    val DROP_POSITION: Int = 100
     val MODE_POWER: Double = 0.8
     val UP_POWER: Double = 0.3
     val DOWN_POWER: Double = 0.15
@@ -99,10 +101,12 @@ class Intake (hwMap: HardwareMap) {
             ModeRotate.OPEN -> OPEN_POSITION
             ModeRotate.CLOSE -> CLOSE_POSITION
             ModeRotate.TRANSFER -> TRANSFER_POSITION
+            else -> DROP_POSITION
         }
 
         val power = when(mode) {
             ModeRotate.OPEN -> DOWN_POWER
+            ModeRotate.DROP -> DOWN_POWER
             else -> UP_POWER
         }
         runRotateToPosition(pos, power)

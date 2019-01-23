@@ -12,8 +12,7 @@ public class SamplingTest : AutonomyBase() {
 
         var currentPosition = TFOD.Positions.UNKNOWN
         while (opModeIsActive()) {
-            var now = tfod.getPosition()
-            if(now != TFOD.Positions.UNKNOWN) currentPosition = now
+            var now = tfod.isGold()
 
             val pos = when(currentPosition) {
                 TFOD.Positions.LEFT -> "Left"

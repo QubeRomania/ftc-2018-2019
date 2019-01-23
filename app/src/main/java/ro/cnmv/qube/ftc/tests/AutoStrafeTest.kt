@@ -24,7 +24,7 @@ class AutoStrafeTest : OpMode() {
         while(opModeIsActive()) {
             if (StrafePID.dist == lastDist) idle()
             lastDist = StrafePID.dist
-            strafe(StrafePID.dist, 0.0)
+            strafe(StrafePID.dist, 0.0, maxTimePerStrafe)
         }
     }
 }

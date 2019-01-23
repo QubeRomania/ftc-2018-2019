@@ -11,9 +11,7 @@ class TrajectoryTester : AutonomyBase() {
     }
 
     override fun Hardware.run() {
-
         while (!isStarted) {
-            sampling()
         }
 
         waitForStart()
