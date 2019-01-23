@@ -38,7 +38,7 @@ class Intake (hwMap: HardwareMap) {
     /// Slide Motor functions
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     var pos = 0
-    val MULTIPLIER: Int = 10
+    val MULTIPLIER: Int = 50
     val SLIDER_CLOSE: Int = 0
     val SLIDER_OPEN: Int = 3000
 
@@ -87,9 +87,9 @@ class Intake (hwMap: HardwareMap) {
         TRANSFER
     }
 
-    val OPEN_POSITION: Int = 650
+    val OPEN_POSITION: Int = 850
     val CLOSE_POSITION: Int =  0
-    val TRANSFER_POSITION: Int = 150
+    val TRANSFER_POSITION: Int = 200
     val MODE_POWER: Double = 0.8
     val UP_POWER: Double = 0.3
     val DOWN_POWER: Double = 0.15

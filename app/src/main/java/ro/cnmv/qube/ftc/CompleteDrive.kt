@@ -34,9 +34,9 @@ class CompleteDrive: OpMode() {
             if (isTransfer) intake.rotate(Intake.ModeRotate.TRANSFER)
             else intake.rotate(Intake.ModeRotate.OPEN)
 
-            if (gp2.left_stick_y > 0.5) intake.maturica(Intake.ModeMaturica.IN)
-            else if (gp2.left_stick_y <= 0.5 && gp2.left_stick_y >= -0.5) intake.maturica(Intake.ModeMaturica.STOP)
-            else if (gp2.left_stick_y < -0.5) intake.maturica(Intake.ModeMaturica.OUT)
+            if (gp2.right_stick_y > 0.5) intake.maturica(Intake.ModeMaturica.IN)
+            else if (gp2.right_stick_y <= 0.5 && gp2.right_stick_y >= -0.5) intake.maturica(Intake.ModeMaturica.STOP)
+            else if (gp2.right_stick_y < -0.5) intake.maturica(Intake.ModeMaturica.OUT)
 
             // Latching
             if(endGame && outTake.isClosed()) { // Make sure the outTake slider is closed before bringing the latcher down
