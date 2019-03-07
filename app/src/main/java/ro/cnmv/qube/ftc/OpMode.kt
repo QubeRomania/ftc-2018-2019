@@ -1,6 +1,7 @@
 package ro.cnmv.qube.ftc
 
 import com.acmerobotics.roadrunner.drive.Drive
+import com.qualcomm.robotcore.eventloop.opmode.Disabled
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode
 import com.qualcomm.robotcore.hardware.PIDCoefficients
 import com.qualcomm.robotcore.util.ElapsedTime
@@ -113,33 +114,20 @@ abstract class OpMode: LinearOpMode() {
         }
     }
 
-    fun strafe(distanceCm: Double, targetHeading: Double, max_time: Int){
-        val pid = PIDCoefficients(StrafePID.p, StrafePID.i, StrafePID.d)
-
+    fun strafe(maxTime: Int, targetHeading: Double, speed: Double){
         with(hw.motors) {
-            var lastError = 0.0
-            var error = 0.0
             val timer = ElapsedTime()
 
-            val totalTime = ElapsedTime()
-            while(timer.milliseconds() < 1000 && opModeIsActive()) {
-                lastError = error
-                error = (hw.distanceSensor.distance - distanceCm)
-
-                val speed = (pid.p*error + pid.i*(error + lastError) + pid.d*(error - lastError)) / StrafePID.ratio
+            while(timer.milliseconds() < maxTime && opModeIsActive()) {
 
                 val correction = getDriveHeadingCorrection(targetHeading)
-
                 move(90.0, speed, correction)
 
-                telemetry.addData("DistanceError", error)
                 telemetry.addData("Speed", speed)
+                telemetry.addData("timeLeft", maxTime - timer.milliseconds())
                 telemetry.addData("HeadingCorrection", correction)
 
                 telemetry.update()
-
-                if(error > 1.0) timer.reset()
-                if(totalTime.milliseconds() > max_time) break
             }
         }
         return
@@ -169,7 +157,7 @@ abstract class OpMode: LinearOpMode() {
             if (absError > 1.0)
                 lastTime = timer.milliseconds()
 
-            telemetry.addData("Current", "%.2f", hw.imu.heading)
+            telemetry.addData("Current", "%d", hw.imu.heading)
             telemetry.addData("Target", "%.2f", targetHeading)
             telemetry.addData("Rotation Correction", "%.2f", correction)
             telemetry.update()

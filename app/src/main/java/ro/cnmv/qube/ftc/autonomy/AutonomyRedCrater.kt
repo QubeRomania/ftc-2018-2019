@@ -33,15 +33,15 @@ class AutonomyRedCrater : AutonomyBase() {
         tfod.stop()
 
         followTrajectory(arrayListOf(Pair(-90.0, -115.0), Pair(0.0, -45.0)))
-        strafe (11.0, -45.0, maxTimePerStrafe)
+        strafe (1000, -45.0, strafeSpeed)
         followTrajectory(arrayListOf(Pair(-120.0, -45.0)))
-        strafe(18.0, -45.0, maxTimePerStrafe)
+        strafe(1000, -45.0, strafeSpeed)
         followTrajectory(arrayListOf(Pair(0.0, 45.0)))
         dropMarker()
         waitMillis(500)
 
         followTrajectory(arrayListOf(Pair(0.0, -45.0)))
-        strafe(13.0, -45.0, maxTimePerStrafe)
+        strafe(1000, -45.0, strafeSpeed)
         followTrajectory(arrayListOf(Pair(160.0, -45.0)))
 
         telemetry.addData("Elapsed time", timer.seconds())

@@ -38,7 +38,7 @@ class OutTake(hwMap: HardwareMap) {
 
     init {
         outTakeSlider.zeroPowerBehavior = DcMotor.ZeroPowerBehavior.FLOAT
-        outTakeSlider.direction = DcMotorSimple.Direction.FORWARD
+        outTakeSlider.direction = DcMotorSimple.Direction.REVERSE
         outTakeSlider.mode = DcMotor.RunMode.STOP_AND_RESET_ENCODER
         outTakeSlider.mode = DcMotor.RunMode.RUN_USING_ENCODER
 

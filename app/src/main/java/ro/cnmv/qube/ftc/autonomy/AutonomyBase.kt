@@ -7,6 +7,9 @@ import ro.cnmv.qube.ftc.waitMillis
 import java.io.File
 
 abstract class AutonomyBase : OpMode() {
+
+    val strafeSpeed = 0.7
+
     val tfod: TFOD by lazy {
         TFOD(hardwareMap, telemetry)
     }
@@ -26,13 +29,13 @@ abstract class AutonomyBase : OpMode() {
     }
 
     fun removeGold() {
-        followTrajectory(arrayListOf(Pair(15.0, 0.0)))
 
+        followTrajectory(arrayListOf(Pair(-15.0, 0.0)))
 
         if (tfod.isGold()) {
             followTrajectory(arrayListOf(
-                    Pair(40.0, 0.0),
-                    Pair(-40.0, 0.0)
+                    Pair(-40.0, 0.0),
+                    Pair(40.0, 0.0)
             ))
 
             goldPosition = TFOD.Positions.CENTER
@@ -43,8 +46,8 @@ abstract class AutonomyBase : OpMode() {
 
         if (tfod.isGold()) {
             followTrajectory(arrayListOf(
-                    Pair(50.0, -35.0),
-                    Pair(-50.0, -35.0)
+                    Pair(-50.0, -35.0),
+                    Pair(50.0, -35.0)
             ))
 
             goldPosition = TFOD.Positions.RIGHT
@@ -52,8 +55,8 @@ abstract class AutonomyBase : OpMode() {
         }
 
         followTrajectory(arrayListOf(Pair(0.0, 35.0),
-                Pair(50.0, 35.0),
-                Pair(-50.0, 35.0)))
+                Pair(-50.0, 35.0),
+                Pair(50.0, 35.0)))
 
         goldPosition = TFOD.Positions.LEFT
     }
@@ -64,5 +67,4 @@ abstract class AutonomyBase : OpMode() {
         waitMillis(500)
         hw.marker.marker.position = 0.0
     }
-
 }

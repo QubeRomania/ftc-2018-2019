@@ -13,8 +13,7 @@ class Autonomy_Saraci : AutonomyBase() {
 
     override fun preInit() {
         // TODO: object detection
-        goldPosition = TFOD.Positions.RIGHT
-        val mata = tfod.isGold()
+        goldPosition = TFOD.Positions.UNKNOWN
         hw.marker.marker.position = 0.0
     }
 
@@ -25,7 +24,6 @@ class Autonomy_Saraci : AutonomyBase() {
     }
 
     override fun Hardware.run() {
-        // TODO: de-latch
 
         timer.reset()
 
@@ -33,9 +31,9 @@ class Autonomy_Saraci : AutonomyBase() {
         tfod.stop()
 
         followTrajectory(arrayListOf(Pair(-90.0, -115.0), Pair(0.0, -45.0)))
-        strafe (11.0, -45.0, maxTimePerStrafe)
+        strafe (1000, -45.0, strafeSpeed)
         followTrajectory(arrayListOf(Pair(-120.0, -45.0)))
-        strafe(18.0, -45.0, maxTimePerStrafe)
+        strafe(1000, -45.0, strafeSpeed)
         followTrajectory(arrayListOf(Pair(0.0, 45.0)))
         dropMarker()
         waitMillis(500)
@@ -46,7 +44,7 @@ class Autonomy_Saraci : AutonomyBase() {
             else -> arrayListOf(Pair(-50.0, 100.0), Pair(50.0, 100.0))
         })
         followTrajectory(arrayListOf(Pair(0.0, -45.0)))
-        strafe(10.0, -45.0, maxTimePerStrafe)
+        strafe(1000, -45.0, strafeSpeed)
         followTrajectory(arrayListOf(Pair(160.0, -45.0)))
 
         telemetry.addData("Elapsed time", timer.seconds())

@@ -25,8 +25,8 @@ class CompleteDrive: OpMode() {
                 val power = (gamepad2.right_trigger - gamepad2.left_trigger).toDouble()
                 outTake.moveSlider(power)
 
-                if(power.absoluteValue < 0.1 && gp2.checkHold(Gamepad.Button.A))outTake.dropMinerals(gp2.checkHold(Gamepad.Button.A))
-                if (!gp2.checkHold(Gamepad.Button.A)) outTake.intermediatePosition()
+                if(power.absoluteValue < 0.1)outTake.dropMinerals(gp2.checkHold(Gamepad.Button.A))
+                //if (!gp2.checkHold(Gamepad.Button.A)) outTake.intermediatePosition()
             }
             ///Intake
             intake.moveSlider((gp1.right_trigger - gp1.left_trigger).toDouble())
@@ -43,16 +43,11 @@ class CompleteDrive: OpMode() {
             else if (gp2.right_stick_y <= 0.5 && gp2.right_stick_y >= -0.5) intake.maturica(Intake.ModeMaturica.STOP)
             else if (gp2.right_stick_y < -0.5) intake.maturica(Intake.ModeMaturica.OUT)
 
-            // Latching
-            if(endGame && outTake.isClosed()) { // Make sure the outTake slider is closed before bringing the latcher down
-                latcher.latch(when(gp1.checkToggle(Gamepad.Button.A)) {
-                    true -> Latcher.LatchPosition.INTERMEDIATE
-                    false -> Latcher.LatchPosition.CLOSED
-                })
-            } else {
-                latcher.latch(Latcher.LatchPosition.EXTENDED)
-            }
-
+            telemetry.addData("Outtake position", outTake.outTakeSlider.currentPosition)
+            telemetry.addData("Target", outTake.outTakePosition)
+            telemetry.addData("Intake position", intake.slideMotor.currentPosition)
+            telemetry.addData("Target", intake.pos)
+            telemetry.update()
             //Drive
             hw.motors.move(direction, speed, rotation)
         }

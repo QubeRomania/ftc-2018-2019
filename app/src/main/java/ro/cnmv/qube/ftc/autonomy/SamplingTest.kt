@@ -10,22 +10,18 @@ public class SamplingTest : AutonomyBase() {
 
         waitForStart()
 
-        var currentPosition = TFOD.Positions.UNKNOWN
+        var foundGold = false
         while (opModeIsActive()) {
-            var now = tfod.isGold()
 
-            val pos = when(currentPosition) {
-                TFOD.Positions.LEFT -> "Left"
-                TFOD.Positions.RIGHT -> "Right"
-                TFOD.Positions.CENTER -> "Center"
-                else -> "UNKNOWN"
-            }
+            foundGold = tfod.isGold()
 
+            telemetry.addLine(when(foundGold) {
+                true -> "GOLD"
+                false -> "NO GOLD"
+            })
             telemetry.update()
+
             sleep(1000)
-
-            telemetry.addData("Position", pos)
-            telemetry.update()
         }
 
         tfod.stop()

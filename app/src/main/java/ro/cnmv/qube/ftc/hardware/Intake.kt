@@ -38,7 +38,7 @@ class Intake (hwMap: HardwareMap) {
     /// Slide Motor functions
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
     var pos = 0
-    val MULTIPLIER: Int = 50
+    val MULTIPLIER: Int = 200
     val SLIDER_CLOSE: Int = 0
     val SLIDER_OPEN: Int = 3000
 
@@ -59,10 +59,6 @@ class Intake (hwMap: HardwareMap) {
 
     fun stopSlide() {
         slideMotor.power = 0.0
-    }
-
-    fun getIntakePosiiton() :Int {
-        return slideMotor.currentPosition
     }
 
     //---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------

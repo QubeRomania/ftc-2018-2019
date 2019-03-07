@@ -35,14 +35,14 @@ class AutonomyRedDepo: AutonomyBase() {
         tfod.stop()
 
         followTrajectory(arrayListOf(Pair(90.0, 65.0), Pair(0.0, -45.0)))
-        strafe (10.0, -45.0, maxTimePerStrafe)
+        strafe (1000, -45.0, strafeSpeed)
         followTrajectory(arrayListOf(Pair(100.0, -45.0)))
-        strafe(12.0, -45.0, maxTimePerStrafe)
+        strafe(1000, -45.0, strafeSpeed)
         followTrajectory(arrayListOf(Pair(0.0, -135.0)))
         dropMarker()
         waitMillis(500)
         followTrajectory(arrayListOf(Pair(0.0, -45.0)))
-        strafe(10.0, -45.0, maxTimePerStrafe)
+        strafe(1000, -45.0, strafeSpeed)
         followTrajectory(arrayListOf(Pair(-180.0, -45.0)))
 
         telemetry.addData("Elapsed time", timer.seconds())
